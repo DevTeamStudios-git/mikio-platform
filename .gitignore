@@ -1,0 +1,66 @@
+# ============================
+# DTS Internal Documentation
+# ============================
+docs/internal/
+
+# ============================
+# Proprietary datasets
+# ============================
+ai/datasets/private/*
+!ai/datasets/private/README.md
+
+# ============================
+# Training outputs
+# ============================
+checkpoints/
+runs/
+logs/
+wandb/
+tensorboard/
+
+# ============================
+# Local models
+# ============================
+ai/models/**/*.safetensors
+ai/models/**/*.gguf
+ai/models/**/*.bin
+ai/models/**/*.ckpt
+
+# ============================
+# Secrets
+# ============================
+.env
+.env.*
+secrets/
+keys/
+*.pem
+*.key
+
+# ============================
+# IDE
+# ============================
+.vscode/*
+!.vscode/.gitkeep
+.idea/
+
+# ============================
+# Node / JS
+# ============================
+node_modules/
+dist/
+build/
+.turbo/
+
+# ============================
+# Python
+# ============================
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ============================
+# OS
+# ============================
+.DS_Store
+Thumbs.db
