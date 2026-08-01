@@ -9,7 +9,7 @@ This roadmap tracks *when* things happen. It doesn't restate *why* (`PROJECT_CHA
 
 ---
 
-## Phase 1 — Foundation Documentation ✅ In Progress
+## Phase 1 — Foundation Documentation ✅ Complete
 
 The groundwork every other phase depends on.
 
@@ -21,34 +21,35 @@ The groundwork every other phase depends on.
 - [x] `ARCHITECTURE.md`
 - [x] `TECH_STACK.md` (all technology decisions locked)
 - [x] `DTS_ENGINEERING_HANDBOOK.md`
-- [ ] `ROADMAP.md` ← *you are here*
-- [ ] `CONTRIBUTING.md`
-- [ ] `SECURITY.md`
-- [ ] `CHANGELOG.md`
-- [ ] `LICENSE`
-- [ ] `PROJECT_CHARTER.md` — Out of Scope and Success Criteria sections finalized *(currently open; blocked on a DTS decision, not on drafting)*
+- [x] `ROADMAP.md`
+- [x] `CONTRIBUTING.md`
+- [x] `SECURITY.md`
+- [x] `CHANGELOG.md`
+- [x] `LICENSE` — split licensing (MIT + STR Model License)
+- [ ] `PROJECT_CHARTER.md` — Out of Scope and Success Criteria sections finalized *(still open; blocked on a DTS business decision, not on drafting — does not block later phases)*
 
-## Phase 2 — Repository & Environment Setup
+## Phase 2 — Repository & Environment Setup ✅ Complete
 
 Turning the documented skeleton into a real, working repository.
 
-- [ ] Create the GitHub organization and `mikio-ai` repository
-- [ ] Create the full folder skeleton per `ARCHITECTURE.md` §2
-- [ ] Configure `.github/` (workflows, issue templates, PR template, CODEOWNERS)
-- [ ] Set up `pnpm` workspaces + Turborepo for the JS/TS side
-- [ ] Set up `uv` for the Python side
-- [ ] Configure GitHub Actions CI (lint, format check, test run) per `TECH_STACK.md`
-- [ ] Set up first ADRs retroactively for decisions already made (Electron vs. Tauri, NestJS+FastAPI split) — see `docs/architecture/decisions/`
-- [ ] GitHub Projects, Issues, Labels, and Discussions configured
+- [x] Create the GitHub organization and `mikio-ai` repository
+- [x] Create the full folder skeleton per `ARCHITECTURE.md` §2
+- [x] Configure `.github/` (workflows, issue templates, PR template, CODEOWNERS)
+- [x] Set up `pnpm` workspaces + Turborepo for the JS/TS side
+- [x] Set up `uv` for the Python side
+- [x] Configure GitHub Actions CI (lint, format check, test run) per `TECH_STACK.md`
+- [ ] Set up first ADRs retroactively for decisions already made (Electron vs. Tauri, NestJS+FastAPI split) — see `docs/architecture/decisions/` *(still open — doesn't block Phase 3)*
+- [x] GitHub Projects, Issues, Labels, and Discussions configured
 
-## Phase 3 — Application & Service Skeleton
+## Phase 3 — Application & Service Skeleton 🟡 In Progress
 
 Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 
+- [x] `apps/web` — Next.js app scaffolded, **verified running locally** (`pnpm install` → `pnpm run dev`, confirmed serving `http://localhost:3000`)
 - [ ] `backend/` — NestJS project scaffolded (auth, users, projects, sessions stubs)
 - [ ] `ai/` — FastAPI service scaffolded, connected to a placeholder vLLM instance
 - [ ] `frontend/` — shared component library scaffolded
-- [ ] `apps/web` — Next.js app scaffolded, wired to NestJS
+- [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
 - [ ] `apps/desktop` — Electron shell wrapping the web app
 - [ ] `packages/` — shared `ui`, `sdk`, `common`, `logger` packages initialized
 - [ ] PostgreSQL + pgvector provisioned (development environment)

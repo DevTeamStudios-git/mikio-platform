@@ -100,7 +100,12 @@ Please review [SECURITY.md](./SECURITY.md) before reporting vulnerabilities or h
 
 ## License
 
-*(License to be finalized — Mikio AI targets an open-source license with commercial use allowed. See [LICENSE](./LICENSE).)*
+Mikio AI uses **split licensing**:
+
+- **Application code** (`apps/`, `backend/`, `frontend/`, `packages/`, tooling) — [MIT](./LICENSE)
+- **STR model weights and checkpoints** (`ai/models/`) — a separate [DevTeamStudios STR Model License](./ai/models/LICENSE), reflecting DTS's own terms on commercial use, redistribution, and modification of the trained models
+
+See each file for full terms. The model license is currently a draft pending legal review.
 
 ## Credits
 
