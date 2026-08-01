@@ -1,0 +1,105 @@
+DevTeamStudios STR Model License
+Version 0.1 — DRAFT, pending legal review
+Applies to: All trained model weights, checkpoints, and derived artifacts
+under ai/models/ (the "STR Models"), including but not limited to STR-3.5 Pro
+and future STR-family releases.
+
+> ⚠️ This is a first draft written to match the constraints DTS specified
+> during project planning. It has NOT been reviewed by a lawyer and should
+> not be treated as final or legally binding until it has been. Model
+> licensing has real commercial and liability implications — get this
+> reviewed before any STR model is actually released under it.
+
+---
+
+1. Scope
+
+This license governs use of the STR Models — the trained weights and
+checkpoints themselves — and is separate from the license covering the
+Mikio AI application and platform code (see the root LICENSE file, MIT).
+Using Mikio AI's application code does not grant any rights to the STR
+Models beyond what's stated here, and vice versa.
+
+2. Grant of Use
+
+Subject to the restrictions in Section 3, DevTeamStudios grants a
+non-exclusive, non-transferable, revocable license to use the STR Models
+for:
+
+  (a) Personal, educational, and research use; and
+  (b) Commercial use, subject to the limitations DTS may specify at the
+      time of release (see Section 3(a)). DTS's intent is to expand
+      commercial use over time as the STR Model family matures — current
+      limitations are not necessarily permanent.
+
+3. Restrictions
+
+  (a) Commercial Use — Limited. Commercial use of the STR Models may be
+      restricted, metered, or require a separate commercial agreement with
+      DTS, as specified for each STR Model release. Where a release does
+      not specify commercial terms, contact DTS before commercial
+      deployment.
+
+  (b) No Redistribution. You may not redistribute, re-host, mirror, or
+      otherwise make the STR Models (or the weights/checkpoints
+      themselves) available to third parties, whether unmodified or
+      modified, except with DTS's prior written consent. This restriction
+      applies regardless of whether redistribution is free or paid.
+
+  (c) No Modification Without Confirmation. You may not modify, fine-tune,
+      merge, quantize, distill, or otherwise create a derivative of the
+      STR Models' weights without first requesting and receiving explicit
+      confirmation from DTS. Using the STR Models as-is for inference is
+      not "modification" under this section; altering the weights
+      themselves is.
+
+  (d) No Misrepresentation. You may not represent a modified or derived
+      version of an STR Model as an official DTS or Mikio AI release.
+
+4. Attribution
+
+Any permitted use of an STR Model must retain a clear statement identifying
+it as a DevTeamStudios STR Model, including which version (e.g.
+"STR-3.5 Pro").
+
+5. No Warranty
+
+THE STR MODELS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. DEVTEAMSTUDIOS DOES
+NOT WARRANT THAT THE STR MODELS' OUTPUTS WILL BE ACCURATE, RELIABLE, OR FIT
+FOR ANY PARTICULAR PURPOSE.
+
+6. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, DEVTEAMSTUDIOS SHALL NOT BE LIABLE
+FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
+ARISING FROM USE OF THE STR MODELS, INCLUDING DAMAGES ARISING FROM MODEL
+OUTPUTS.
+
+7. Termination
+
+This license terminates automatically if you breach Section 3. Upon
+termination, you must cease use of the STR Models and delete any copies of
+their weights in your possession, except as required for legal compliance.
+
+8. Relationship to Upstream Foundation Model
+
+STR Models are derived from an upstream foundation model (currently
+DeepSeek) via continued pretraining, instruction tuning, and preference
+optimization. This license governs DTS's rights in the STR Models as
+DTS's own work product; it does not modify or supersede the license terms
+of the underlying upstream foundation model. Where upstream terms impose
+additional obligations, both this license and the upstream terms apply.
+
+9. Changes to This License
+
+DTS may update this license for future STR Model releases. The license
+version in effect for a given released model is the version distributed
+alongside that model's release artifacts.
+
+---
+
+Questions about licensing or commercial terms: contact DevTeamStudios.
+(Contact channel TBD — see the note on SECURITY.md's contact section; the
+same gap applies here and should be resolved alongside it.)
