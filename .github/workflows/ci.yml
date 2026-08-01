@@ -88,9 +88,15 @@ jobs:
         # since ai/{training,evaluation,inference,tools} don't have tests yet
         # (Phase 3+). Treat that specific case as a pass; any other non-zero
         # exit code still fails the job.
+        # GitHub Actions runs steps with `bash -e` (errexit), so a failing
+        # command aborts the script before any following lines run. Disable
+        # errexit around pytest so the exit code can be inspected below.
+        shell: bash
         run: |
+          set +e
           uv run pytest
           code=$?
+          set -e
           if [ $code -eq 5 ]; then
             echo "No tests collected yet — expected pre-Phase 3, not a failure."
             exit 0
