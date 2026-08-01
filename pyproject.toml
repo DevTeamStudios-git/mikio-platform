@@ -1,0 +1,26 @@
+# Root uv workspace configuration for the Python/AI side of Mikio AI.
+# Only ai/ is Python-managed — the JS/TS side (apps/, backend/, frontend/,
+# packages/) is handled separately via pnpm + Turborepo (see package.json).
+#
+# Members listed here don't have their own pyproject.toml yet — that's
+# Phase 3 (Application Skeleton), same boundary as the JS/TS workspace.
+
+[project]
+name = "mikio-ai-workspace"
+version = "0.1.0"
+description = "Workspace root for Mikio AI's Python/AI layer (training, evaluation, inference)."
+requires-python = ">=3.11"
+
+[tool.uv.workspace]
+members = [
+    "ai/training",
+    "ai/evaluation",
+    "ai/inference",
+    "ai/tools",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "ruff>=0.6.0",
+]

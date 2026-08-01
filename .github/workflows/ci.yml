@@ -1,0 +1,98 @@
+# Mikio AI — Continuous Integration
+#
+# Runs lint + test for both workspaces set up in Phase 2:
+#   - JS/TS workspace (pnpm + Turborepo)
+#   - Python/AI workspace (uv)
+#
+# NOTE: as of this workflow's creation, apps/, backend/, frontend/, packages/,
+# and ai/{training,evaluation,inference,tools} are empty (Phase 3 — Application
+# Skeleton — hasn't happened yet). Turborepo and uv both no-op gracefully when
+# there's nothing to build/lint/test yet, so this workflow is safe to merge now
+# and will start doing real work automatically as Phase 3 populates the workspaces.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  js-ts:
+    name: JS/TS — Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Test
+        run: pnpm run test
+
+  python-ai:
+    name: Python/AI — Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.x"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Test (pytest)
+        # pytest exits 5 when zero tests are collected — expected right now,
+        # since ai/{training,evaluation,inference,tools} don't have tests yet
+        # (Phase 3+). Treat that specific case as a pass; any other non-zero
+        # exit code still fails the job.
+        run: |
+          uv run pytest
+          code=$?
+          if [ $code -eq 5 ]; then
+            echo "No tests collected yet — expected pre-Phase 3, not a failure."
+            exit 0
+          fi
+          exit $code

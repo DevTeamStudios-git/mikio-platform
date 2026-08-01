@@ -1,0 +1,12 @@
+# JS/TS workspace members.
+# The Python/AI side (ai/) is intentionally NOT part of this workspace —
+# it's managed separately via uv (see pyproject.toml).
+#
+# Note: none of these paths contain a package.json yet — that's Phase 3
+# (Application Skeleton). This file just declares where workspace packages
+# will live once they exist; pnpm does not error on empty/unmatched globs.
+packages:
+  - "apps/*"
+  - "backend"
+  - "frontend"
+  - "packages/*"
