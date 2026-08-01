@@ -1,0 +1,20 @@
+{
+  "name": "mikio-ai",
+  "private": true,
+  "description": "Mikio AI monorepo — workspace root (JS/TS side). The Python/AI side is managed separately via uv (see pyproject.toml).",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "turbo run format"
+  },
+  "devDependencies": {
+    "turbo": "^2.1.0",
+    "typescript": "^5.6.0"
+  }
+}
