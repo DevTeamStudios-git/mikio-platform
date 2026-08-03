@@ -1,7 +1,8 @@
 # ============================
 # DTS Internal Documentation
 # ============================
-docs/internal/
+docs/internal/*
+!docs/internal/README.md
 
 # ============================
 # Proprietary datasets
