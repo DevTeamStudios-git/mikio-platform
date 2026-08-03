@@ -27,10 +27,12 @@ The repository was made **public** (2026-08-03) to enable branch protection on t
 | Require review thread resolution | Yes | ✔ |
 | Required status checks | `js-ts`, `python-ai` | ✔ |
 | Status check strict mode | Yes (must be up to date) | ✔ |
-| Enforce admins | Yes | ✔ |
+| Enforce admins | **No** | ✔ (see note below) |
 | Block force pushes | Yes | ✔ |
 | Restrict deletions | Yes | ✔ |
 | Bypass actors | None | ✔ |
+
+> **Enforce admins = No (set 2026-08-03).** Required because GitHub does not allow a PR author to approve their own PR, and this repo currently has a single active contributor (the owner). With `enforce_admins: true` plus 1 required approval, *no* PR could ever be merged. Admins can now merge directly (bypassing the review requirement) while non-admin contributors still require PR + 1 approval + passing checks. If a second active contributor joins, re-enable `enforce_admins` and consider a dedicated reviewer.
 
 ### `release/*` — repository ruleset (created 2026-08-03, ruleset id 20325124)
 
