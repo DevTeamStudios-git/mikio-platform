@@ -96,6 +96,7 @@ Tracked as known future work, not committed to a phase:
 - Kubernetes, once scale requires orchestration beyond single-instance deployment
 - Re-evaluating Tauri for desktop, only if Electron's footprint becomes a demonstrated problem
 - Splitting `ai/`, `apps/*`, or `backend/` into independent repositories, per the Stage 2/3 growth plan in `ARCHITECTURE.md` §11
+- **Upgrade `backend/` to NestJS 11** — required to close CVE-2026-35515 (`@nestjs/core` injection; fixed only in `>=11.1.18`, no Nest 10 patch exists). Currently tracked as an accepted risk in `SECURITY.md` §4 because the exposed surface is one status endpoint; revisit when Nest 11 becomes the LTS line or when real module logic lands in `backend/`. A Dependabot PR (`@nestjs/core` → 11.1.18) already exists for reference.
 
 ---
 
