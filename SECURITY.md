@@ -56,6 +56,18 @@ Disclosure
 
 > ⚠️ **TBD.** A formal severity matrix (e.g. Critical/High/Medium/Low with defined criteria) has not yet been established. Until one exists, severity is assessed case-by-case based on: exposure of user/customer data, potential for unauthorized system access, and potential for unauthorized model or tool execution. This section should be replaced with an explicit matrix once DTS defines one.
 
+### Accepted Risks
+
+Known-vulnerable dependencies that are intentionally *not* patched right now, with the reasoning and a concrete trigger to revisit. Each entry is a deliberate decision, not an oversight. `pnpm audit` should report 0 findings apart from these entries.
+
+#### NestJS `@nestjs/core` — CVE-2026-35515 (moderate)
+
+- **Package / version:** `@nestjs/core` `10.4.22` (also `@nestjs/common`, `@nestjs/platform-express` at the same line)
+- **Advisory:** Improperly Neutralizes Special Elements in Output Used by a Downstream Component ('Injection'). Fixed only in `>=11.1.18`; the entire NestJS 10 line is vulnerable with no backport.
+- **Why no fix:** Fixing requires a major-version upgrade (NestJS 10 → 11). Upgrading mid-scaffold, to close one moderate advisory in a backend that currently exposes a single status endpoint (`GET /`), is disproportionate complexity before demonstrated need (see `ROADMAP.md` Future / Not Yet Scheduled).
+- **Mitigating exposure:** The `backend/` app exposes one endpoint with no user-controlled input, no auth surface, and no database/3rd-party interaction. The vulnerable code path (injection via downstream output) has no reachable entry point in the current code.
+- **Revisit trigger:** When NestJS 11 becomes the LTS line, **or** when real module logic (auth, users, projects, etc.) starts landing in `backend/` — whichever comes first. A Dependabot PR (`@nestjs/core` → 11.1.18) exists for reference; it should be merged as part of the upgrade work rather than blindly.
+
 ## 5. Supported Versions
 
 Mikio AI is currently pre-release (see `ROADMAP.md`). Until a versioned public release exists, security fixes apply to `main` only. This section will be updated with a supported-version table once versioned releases begin.
