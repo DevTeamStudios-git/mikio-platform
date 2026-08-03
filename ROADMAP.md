@@ -46,7 +46,7 @@ Turning the documented skeleton into a real, working repository.
 Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 
 - [x] `apps/web` — Next.js app scaffolded, **verified running locally** (`pnpm install` → `pnpm run dev`, confirmed serving `http://localhost:3000`)
-- [ ] `backend/` — NestJS project scaffolded (auth, users, projects, sessions stubs)
+- [x] `backend/` — NestJS project scaffolded (root module + status endpoint), **verified locally and merged** (lint, e2e test, type-check all green; CI passed on Linux)
 - [ ] `ai/` — FastAPI service scaffolded, connected to a placeholder vLLM instance
 - [ ] `frontend/` — shared component library scaffolded
 - [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
