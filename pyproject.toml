@@ -2,16 +2,17 @@
 # Only ai/ is Python-managed — the JS/TS side (apps/, backend/, frontend/,
 # packages/) is handled separately via pnpm + Turborepo (see package.json).
 #
-# NOTE: [tool.uv.workspace] members are intentionally NOT declared yet.
-# uv treats a declared member as a hard requirement — if the path exists
-# but has no pyproject.toml, `uv sync` fails outright (unlike pnpm, which
-# tolerates unmatched/empty workspace globs). ai/training, ai/evaluation,
-# ai/inference, and ai/tools currently only contain placeholder README.md
-# files (Phase 1) with no pyproject.toml of their own.
+# ai/inference is a real workspace member as of this change — it has its
+# own pyproject.toml (see ai/inference/pyproject.toml). The other three
+# (ai/training, ai/evaluation, ai/tools) are still NOT declared: uv treats
+# a declared member as a hard requirement — if the path exists but has no
+# pyproject.toml, `uv sync` fails outright (unlike pnpm, which tolerates
+# unmatched/empty workspace globs). Those three currently only contain
+# placeholder README.md files.
 #
-# Add each one to `members` in the SAME PR that gives it a real
-# pyproject.toml — not before. See CHANGELOG.md for when this was fixed
-# after breaking CI on the first Phase 3 PR.
+# Add each remaining one to `members` in the SAME PR that gives it a real
+# pyproject.toml — not before. See CHANGELOG.md for when this rule was
+# established, after breaking CI on the first Phase 3 PR.
 
 [project]
 name = "mikio-ai-workspace"
@@ -19,8 +20,13 @@ version = "0.1.0"
 description = "Workspace root for Mikio AI's Python/AI layer (training, evaluation, inference)."
 requires-python = ">=3.11"
 
-[tool.uv]
-dev-dependencies = [
+[tool.uv.workspace]
+members = [
+    "ai/inference",
+]
+
+[dependency-groups]
+dev = [
     "pytest>=8.0.0",
     "ruff>=0.6.0",
 ]
