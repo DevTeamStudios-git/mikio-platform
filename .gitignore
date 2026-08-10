@@ -52,6 +52,7 @@ dist/
 build/
 .next/
 .turbo/
+*.tsbuildinfo
 
 # ============================
 # Python

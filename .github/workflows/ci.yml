@@ -5,10 +5,12 @@
 #   - Python/AI workspace (uv)
 #
 # NOTE: as of this workflow's creation, apps/, backend/, frontend/, packages/,
-# and ai/{training,evaluation,inference,tools} are empty (Phase 3 — Application
-# Skeleton — hasn't happened yet). Turborepo and uv both no-op gracefully when
-# there's nothing to build/lint/test yet, so this workflow is safe to merge now
-# and will start doing real work automatically as Phase 3 populates the workspaces.
+# and ai/{training,evaluation,inference,tools} were empty (Phase 3 — Application
+# Skeleton — hadn't happened yet). Turborepo and uv both no-op gracefully when
+# there's nothing to build/lint/test yet. Phase 3 has since populated backend/,
+# frontend/, and ai/inference; the `js-ts` job also runs a full build so that
+# raw-source workspace packages (e.g. `@mikio-ai/frontend` consumed via
+# `transpilePackages`) are proven compilable on every PR.
 
 name: CI
 
@@ -61,6 +63,13 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: Build
+        # `next build` exercises the full workspace-graph compile path (turbo
+        # `^build` dependsOn), including transpiling `@mikio-ai/frontend` raw
+        # sources via `transpilePackages`. Lint/test alone won't catch a broken
+        # workspace→app import, so a real build runs here on every PR.
+        run: pnpm run build
 
   python-ai:
     name: Python/AI — Lint & Test
