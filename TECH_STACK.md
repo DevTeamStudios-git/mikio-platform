@@ -237,6 +237,8 @@ Fast OAuth integration for v1. **Revisit condition:** enterprise customers will 
 | Frontend / Backend (TypeScript) | **Vitest** (unit/integration) + **Playwright** (e2e) | ✅ Lock |
 | AI layer (Python) | **pytest** | ✅ Lock |
 
+> **Named deviation — `backend/` uses Jest, not Vitest.** `backend/` (NestJS) was scaffolded with Jest, which is Nest's idiomatic default (`nest new` + `@nestjs/testing` + `ts-jest`), instead of checking back against the Vitest lock above. This decision predates the frontend work and is an **accepted deviation** — recorded here rather than silently absorbed, and scheduled for migration in `ROADMAP.md`. `frontend/` uses Vitest per this table; future TypeScript work should default to the locked stack (Vitest + Playwright) unless there's a documented reason otherwise.
+
 ## 11. Build / Package Management
 
 | Ecosystem | Tooling | Status |

@@ -47,8 +47,9 @@ Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 
 - [x] `apps/web` — Next.js app scaffolded, **verified running locally** (`pnpm install` → `pnpm run dev`, confirmed serving `http://localhost:3000`)
 - [x] `backend/` — NestJS project scaffolded (root module + status endpoint), **verified locally and merged** (lint, e2e test, type-check all green; CI passed on Linux)
-- [ ] `ai/` — FastAPI service scaffolded, connected to a placeholder vLLM instance
-- [ ] `frontend/` — shared component library scaffolded
+- [x] `ai/inference` — FastAPI service scaffolded and **merged** (status endpoint + test, verified via pytest + ruff + live boot in CI) — the three data-flow points from `ARCHITECTURE.md` §5 now all exist as real, independently-verified code
+- [ ] `ai/inference` connected to a placeholder vLLM instance
+- [ ] `frontend/` — shared component library scaffolded *(in progress — first component `Hero`, wired into `apps/web`)*
 - [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
 - [ ] `apps/desktop` — Electron shell wrapping the web app
 - [ ] `packages/` — shared `ui`, `sdk`, `common`, `logger` packages initialized
@@ -97,6 +98,7 @@ Tracked as known future work, not committed to a phase:
 - Re-evaluating Tauri for desktop, only if Electron's footprint becomes a demonstrated problem
 - Splitting `ai/`, `apps/*`, or `backend/` into independent repositories, per the Stage 2/3 growth plan in `ARCHITECTURE.md` §11
 - **Upgrade `backend/` to NestJS 11** — required to close CVE-2026-35515 (`@nestjs/core` injection; fixed only in `>=11.1.18`, no Nest 10 patch exists). Currently tracked as an accepted risk in `SECURITY.md` §4 because the exposed surface is one status endpoint; revisit when Nest 11 becomes the LTS line or when real module logic lands in `backend/`. A Dependabot PR (`@nestjs/core` → 11.1.18) already exists for reference.
+- **Migrate `backend/` tests from Jest to Vitest** — `backend/` was scaffolded with Nest's idiomatic Jest tooling even though `TECH_STACK.md` §10 locks Vitest + Playwright for the TypeScript layers. Accepted deviation, recorded in `TECH_STACK.md` §10; migrate to Vitest (and add Playwright e2e when real e2e flows exist) rather than letting two JS test runners live in the workspace long-term.
 
 ---
 
