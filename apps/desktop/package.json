@@ -1,0 +1,21 @@
+{
+  "name": "@mikio-ai/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mikio AI — desktop application (Electron shell wrapping the shared web UI). See TECH_STACK.md §3 and ARCHITECTURE.md §8.",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json && electron .",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "electron .",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "electron": "^43.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
