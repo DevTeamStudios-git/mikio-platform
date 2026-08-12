@@ -49,9 +49,9 @@ Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 - [x] `backend/` — NestJS project scaffolded (root module + status endpoint), **verified locally and merged** (lint, e2e test, type-check all green; CI passed on Linux)
 - [x] `ai/inference` — FastAPI service scaffolded and **merged** (status endpoint + test, verified via pytest + ruff + live boot in CI) — the three data-flow points from `ARCHITECTURE.md` §5 now all exist as real, independently-verified code
 - [ ] `ai/inference` connected to a placeholder vLLM instance
-- [ ] `frontend/` — shared component library scaffolded *(in progress — first component `Hero`, wired into `apps/web`)*
+- [x] `frontend/` — shared component library scaffolded, first component (`Hero`) wired into `apps/web` (**merged**, CI-verified)
 - [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
-- [ ] `apps/desktop` — Electron shell wrapping the web app
+- [x] `apps/desktop` — Electron shell wrapping the web app, **verified** (compiles via tsc, secure defaults unit-tested, boots the window; web-UI wiring beyond loading the dev server is Phase 4)
 - [ ] `packages/` — shared `ui`, `sdk`, `common`, `logger` packages initialized
 - [ ] PostgreSQL + pgvector provisioned (development environment)
 - [ ] Auth.js integrated for v1 authentication
