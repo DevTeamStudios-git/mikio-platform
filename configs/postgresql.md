@@ -1,139 +1,140 @@
-# PostgreSQL + pgvector — Local Development Provisioning
+# PostgreSQL + pgvector — Local Development Setup
 
-Authoritative, platform-specific guide for standing up a local **PostgreSQL** instance with the **pgvector** extension. Covers development environments only.
+**Status:** Provisioning docs only. No application code depends on this yet — `backend/`'s
+only endpoint today is `GET /` (status). This document exists so Postgres + pgvector is
+ready to consume once real DB-backed features start in Phase 4.
 
-## Scope
+**Why direct install, not Docker:** `TECH_STACK.md` §13 explicitly names PostgreSQL as a
+local-dev direct process, not a container — Docker is reserved for production, CI, and
+genuinely container-appropriate services. This doc follows that boundary. If that tradeoff
+ever needs revisiting (e.g. pgvector's Windows build friction below becomes a recurring
+blocker), that's a `TECH_STACK.md` §13 change to propose explicitly, not something to work
+around quietly here.
 
-- **Direct processes, no containers** — matches the `TECH_STACK.md` §13 development boundary, where PostgreSQL is an explicitly-named local process (Docker is production/CI only and is *not* imposed on local development by default).
-- **No cloud database yet.** `TECH_STACK.md` §14 defers the provider choice (`🟡 Don't choose provider yet`) and `ARCHITECTURE.md` §10 lists deployment as *(Not yet defined.)*, so standing up a hosted instance would force a decision this phase deliberately leaves open.
-- This guide provisions the engine only. Connecting an application to it via `DATABASE_URL` is Phase 4 (`ROADMAP.md` — "Configuration system (`configs/`) wired up across services").
+---
 
-## Requirements
+## 1. Install PostgreSQL
 
-- PostgreSQL **13 or newer** (18 is current; 17 is the previous stable).
-- Postgres must be installed **before** pgvector — pgvector compiles/loads against your installed Postgres and is version-specific.
+Use a recent PostgreSQL (16+). Install via your platform's normal method:
 
-## 1. PostgreSQL Installation (brief)
-
-Install Postgres however is native to your OS:
-
-| Platform | Options |
+| Platform | Method |
 |---|---|
-| Linux (Debian/Ubuntu) | `sudo apt install postgresql` (or the PGDG repo for a specific major) |
-| Linux (Fedora/RHEL) | `sudo dnf install postgresql-server` (PGDG repo for specific majors) |
-| macOS | `brew install postgresql@18` or [Postgres.app](https://postgresapp.com/) |
-| Windows | Official installer from [postgresql.org/download](https://www.postgresql.org/download/) (`C:\Program Files\PostgreSQL\18` is the default) |
+| macOS | `brew install postgresql@16` (or newer) |
+| Ubuntu/Debian | [PGDG APT repo](https://www.postgresql.org/download/linux/ubuntu/) — the distro-default package is often outdated |
+| Windows | [Official installer](https://www.postgresql.org/download/windows/) (EDB installer) |
 
-Then start the server and create the database used by the project (example for a local `postgres` superuser):
+Verify:
 
-```bash
-# Linux/macOS: create the app database
-createdb mikio
-
-# Windows (psql):
-psql -U postgres -c "CREATE DATABASE mikio;"
+```sh
+psql --version
 ```
 
-## 2. pgvector Installation
+## 2. Install pgvector
 
-pgvector **0.8.6** (current). It must be installed *per Postgres major version* — if you later upgrade Postgres, rebuild/reinstall pgvector for the new major.
+pgvector is a Postgres extension, installed once per Postgres instance, then enabled once
+per database.
 
-### Linux — Debian / Ubuntu (APT)
+### macOS
 
-Package names follow the Postgres major (PGDG repo required for full coverage):
-
-```bash
-sudo apt install postgresql-18-pgvector   # PostgreSQL 18
-# or, for another major: postgresql-<major>-pgvector
-```
-
-### Linux — Fedora / RHEL (DNF)
-
-```bash
-sudo dnf install -y pgvector_18   # PostgreSQL 18 (PGDG repo); other majors: pgvector_<major>
-```
-
-### macOS — Homebrew
-
-```bash
+```sh
 brew install pgvector
 ```
 
-> Homebrew's `pgvector` formula installs into Homebrew's own `postgresql@17`/`postgresql@18`. If your Postgres came from elsewhere (e.g. Postgres.app), use the from-source build below instead.
+### Ubuntu/Debian (matches your Postgres major version)
 
-### macOS — Postgres.app
+```sh
+sudo apt install postgresql-16-pgvector   # replace 16 with your Postgres version
+```
 
-pgvector ships **preinstalled** in Postgres.app — no build needed. Skip to step 3.
+If your distro's package is missing or stale, build from source instead:
 
-### Windows — build from source (official path)
+```sh
+git clone --branch v0.8.6 https://github.com/pgvector/pgvector.git
+cd pgvector
+make
+sudo make install
+```
 
-Requires **Visual Studio** with the **Desktop development with C++** workload, run from an **x64 Native Tools Command Prompt as Administrator**:
+### Windows
 
-```bat
-set "PGROOT=C:\Program Files\PostgreSQL\18"
+**This is the fiddliest platform — budget extra time the first time.** pgvector has no
+official prebuilt Windows binary; it's built with `nmake` against a Visual C++ toolchain.
 
+**Prerequisites:**
+1. PostgreSQL installed (via the EDB installer above)
+2. [Git for Windows](https://git-scm.com/download/win)
+3. Visual Studio (Community edition is fine) with the **"Desktop development with C++"**
+   workload installed
+
+**Build steps** — open **"x64 Native Tools Command Prompt for VS 2022"** (search for it in
+the Start menu — this is not a regular terminal, it has the C++ build environment
+preloaded) and run:
+
+```cmd
+set "PGROOT=C:\Program Files\PostgreSQL\16"
+cd %TEMP%
 git clone --branch v0.8.6 https://github.com/pgvector/pgvector.git
 cd pgvector
 nmake /F Makefile.win
 nmake /F Makefile.win install
 ```
 
-Adjust `PGROOT` to your installed Postgres major (`...\PostgreSQL\17` etc.).
+Adjust `PGROOT` to match your installed Postgres version/path.
 
-**Windows alternative — conda-forge** (only if Postgres is conda-managed):
+**Common issues:**
+- `Cannot open include file: 'postgres.h'` → `PGROOT` is wrong; double-check the path
+- `error C2196: case value '4' already used` → you're not in the x64 Native Tools prompt;
+  reopen the correct one, run `nmake /F Makefile.win clean`, retry
+- `Access is denied` → re-run the prompt as Administrator
 
-```bash
-conda install -c conda-forge pgvector
+**Lighter alternative:** if the Visual Studio toolchain is too heavy to install just for
+this, `conda-forge` distributes a prebuilt pgvector package (`conda install -c conda-forge
+pgvector`) — this sidesteps the build step entirely, at the cost of running Postgres inside
+a conda environment. Not the default path here since it's an additional tooling dependency,
+but worth knowing about if the build keeps failing.
+
+## 3. Create the database and enable the extension
+
+```sh
+createdb mikio_dev
+psql -d mikio_dev -c "CREATE EXTENSION vector;"
 ```
 
-### Any POSIX system — build from source (fallback / non-Homebrew installs)
+Verify it's active:
 
-Requires the PostgreSQL server dev headers (e.g. `postgresql-server-dev-18` on Debian/Ubuntu):
-
-```bash
-cd /tmp
-git clone --branch v0.8.6 https://github.com/pgvector/pgvector.git
-cd pgvector
-make && make install
+```sh
+psql -d mikio_dev -c "\dx vector"
 ```
 
-Other options documented upstream: PGXN packages and host-provided installs (Supabase, Neon, etc. ship pgvector preinstalled).
+You should see `vector` listed with an installed version.
 
-## 3. Activate the Extension
+## 4. Connection string
 
-pgvector is a Postgres **extension** — install once per database that needs it:
-
-```bash
-psql -d mikio -c "CREATE EXTENSION IF NOT EXISTS vector;"
-```
-
-## 4. Verify
-
-```sql
--- Extension is installed (installed_version ≥ 1, ideally 0.8.6)
-SELECT name, default_version, installed_version
-FROM pg_available_extensions WHERE name = 'vector';
-
--- Smoke test: creation + insert + distance operator
-CREATE TEMP TABLE t (v vector(3));
-INSERT INTO t VALUES ('[1,2,3]'), ('[4,5,6]');
-SELECT '[1,2,3]'::vector <-> '[4,5,6]'::vector AS l2_distance;  -- expect 5.196152422706631
-```
-
-There is also an automated helper — see [`scripts/check-postgres.ps1`](../scripts/check-postgres.ps1).
-
-> **Verification status:** instructions above were checked against pgvector's official README (v0.8.6) at the time of writing, but **no live Postgres instance exists in the drafting environment**, so the exact commands have not been run end-to-end here. Run them on your machine and confirm output before relying on them.
-
-## Connection String
-
-Services read the connection from `DATABASE_URL` (see [`configs/.env.example`](./env.example)):
+Copy `configs/.env.example` to a local `.env` (gitignored) and adjust credentials:
 
 ```
-postgresql://postgres:postgres@localhost:5432/mikio
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mikio_dev
 ```
+
+No application code reads this yet (see Status above) — this is the connection string
+future `backend/` and `ai/inference` work will consume once DB integration starts.
+
+## 5. Verify connectivity
+
+Run the helper script:
+
+```sh
+pwsh ./scripts/check-postgres.ps1
+```
+
+This connects using `DATABASE_URL`, confirms `pgvector` is enabled, and exits non-zero on
+any failure — useful as a first troubleshooting step before assuming an application-level
+bug once real DB code exists.
+
+---
 
 ## References
 
-- pgvector README: <https://github.com/pgvector/pgvector#installation>
-- postgresql.org download: <https://www.postgresql.org/download/>
-- `TECH_STACK.md` §13 — Docker usage boundary (this guide exists *because* local dev is direct processes)
+- [pgvector README](https://github.com/pgvector/pgvector) — canonical install instructions, kept current across platforms
+- [PostgreSQL downloads](https://www.postgresql.org/download/)
+- `TECH_STACK.md` §13 — Docker usage boundary this doc follows
