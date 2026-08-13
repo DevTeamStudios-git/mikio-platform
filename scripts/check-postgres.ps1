@@ -27,7 +27,8 @@ function Write-Step {
 }
 
 function Write-Pass {
-    Write-Host "    PASS: $_" -ForegroundColor Green
+    param([Parameter(Mandatory = $true)][string]$Message)
+    Write-Host "    PASS: $Message" -ForegroundColor Green
 }
 
 function Write-Fail {
