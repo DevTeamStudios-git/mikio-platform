@@ -32,6 +32,7 @@ ai/models/**/*.ckpt
 # ============================
 .env
 .env.*
+!.env.example
 secrets/
 keys/
 *.pem

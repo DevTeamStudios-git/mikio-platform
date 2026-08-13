@@ -156,7 +156,7 @@ Per the engineering handbook: tests accompany new features whenever practical, a
 
 ## 10. Deployment Strategy
 
-*(Not yet defined.)* Desktop and mobile support are targeted as supported platforms; offline support is explicitly out of scope for now. Deployment details (hosting, CI/CD pipeline specifics, release cadence) belong here once decided — see `.github/workflows/` and `MODEL_RELEASE_PROCESS.md`.
+*(Not yet defined.)* Desktop and mobile support are targeted as supported platforms; offline support is explicitly out of scope for now. Deployment details (hosting, CI/CD pipeline specifics, release cadence) belong here once decided — see `.github/workflows/` and `MODEL_RELEASE_PROCESS.md`. Local development provisioning of the database layer (PostgreSQL + pgvector, direct install — no containers) is documented in [`configs/postgresql.md`](./configs/postgresql.md).
 
 ## 11. Future Expansion
 

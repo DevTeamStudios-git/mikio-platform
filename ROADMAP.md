@@ -53,7 +53,7 @@ Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 - [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
 - [x] `apps/desktop` — Electron shell wrapping the web app, **verified** (compiles via tsc, secure defaults unit-tested, boots the window; web-UI wiring beyond loading the dev server is Phase 4)
 - [x] `packages/` — shared non-UI libraries scaffolded (`common`, `logger`, `sdk`), **verified** (source-first, 10 unit tests, typed API client for the backend status endpoint; shared UI stays in `frontend/` per `ARCHITECTURE.md` §8)
-- [ ] PostgreSQL + pgvector provisioned (development environment)
+- [x] PostgreSQL + pgvector provisioning — [`configs/postgresql.md`](./configs/postgresql.md) (per-platform direct install), [`configs/.env.example`](./configs/.env.example) (`DATABASE_URL`), and [`scripts/check-postgres.ps1`](./scripts/check-postgres.ps1) (reachability + `vector` extension check). Install steps verified against pgvector's official docs and the helper syntax-checked, **but no live Postgres exists in the drafting environment** — the actual instance is still to be stood up on a dev machine
 - [ ] Auth.js integrated for v1 authentication
 
 ## Phase 4 — First End-to-End Feature
