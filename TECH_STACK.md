@@ -199,11 +199,15 @@ Application servers stay CPU-oriented; only the FastAPI/vLLM layer needs GPU-bac
 
 Structured application data — users, projects, sessions. Mature, open-source, strong TypeScript ORM support (Prisma).
 
+Local development provisioning (direct install, no Docker, per §13) is documented in [`configs/postgresql.md`](./configs/postgresql.md); automated health check via [`scripts/check-postgres.ps1`](./scripts/check-postgres.ps1).
+
 ## 6. Vector / Memory
 
 **pgvector (inside the existing PostgreSQL instance)** ✅ Lock
 
 One less service to operate versus a dedicated vector DB (Qdrant/Weaviate). Sufficient at expected scale for the first year+. Migrate to a dedicated vector DB only if/when memory search becomes a measured bottleneck — not upfront.
+
+pgvector ships either preinstalled (Postgres.app, hosted providers), as a distro package, or builds from source — install guide: [`configs/postgresql.md`](./configs/postgresql.md).
 
 ## 7. AI / Model Runtime
 
