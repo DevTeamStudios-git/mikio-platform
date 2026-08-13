@@ -165,6 +165,40 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(@types/node@24.13.3)(terser@5.49.0)
 
+  packages/common:
+    devDependencies:
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(@types/node@24.13.3)(terser@5.49.0)
+
+  packages/logger:
+    devDependencies:
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(@types/node@24.13.3)(terser@5.49.0)
+
+  packages/sdk:
+    dependencies:
+      '@mikio-ai/common':
+        specifier: workspace:*
+        version: link:../common
+      '@mikio-ai/logger':
+        specifier: workspace:*
+        version: link:../logger
+    devDependencies:
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(@types/node@24.13.3)(terser@5.49.0)
+
 packages:
 
   '@angular-devkit/core@17.3.11':
