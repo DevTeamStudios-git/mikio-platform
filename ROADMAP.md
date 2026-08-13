@@ -52,7 +52,7 @@ Standing up the empty shells for each layer, per `ARCHITECTURE.md`.
 - [x] `frontend/` — shared component library scaffolded, first component (`Hero`) wired into `apps/web` (**merged**, CI-verified)
 - [ ] `apps/web` wired to NestJS *(app itself exists; backend connection is separate work)*
 - [x] `apps/desktop` — Electron shell wrapping the web app, **verified** (compiles via tsc, secure defaults unit-tested, boots the window; web-UI wiring beyond loading the dev server is Phase 4)
-- [ ] `packages/` — shared `ui`, `sdk`, `common`, `logger` packages initialized
+- [x] `packages/` — shared non-UI libraries scaffolded (`common`, `logger`, `sdk`), **verified** (source-first, 10 unit tests, typed API client for the backend status endpoint; shared UI stays in `frontend/` per `ARCHITECTURE.md` §8)
 - [ ] PostgreSQL + pgvector provisioned (development environment)
 - [ ] Auth.js integrated for v1 authentication
 

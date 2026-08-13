@@ -30,7 +30,7 @@ mikio-ai/
 ├── ai/            # foundation, models, training, datasets, evaluation, inference, prompts, tools, research
 ├── backend/       # api, auth, services, storage, memory, database
 ├── frontend/      # components, layouts, pages, assets, styles, themes
-├── packages/      # shared libraries (ui, sdk, common, logger)
+├── packages/      # shared libraries (sdk, common, logger)
 ├── scripts/       # automation, formatting, release, dataset prep, model conversion
 ├── tests/         # unit, integration, performance, e2e
 ├── docs/          # public, internal, architecture, specifications, images
@@ -47,7 +47,7 @@ mikio-ai/
 | `ai/` | Everything in the model lifecycle: base model selection, training, datasets, evaluation, inference runtime, prompts, and tool/MCP definitions. |
 | `backend/` | Server-side logic: authentication, API surface, memory, storage, database access. |
 | `frontend/` | Reusable UI components with no business logic. |
-| `packages/` | Shared libraries used across apps and backend (e.g. `ui`, `sdk`, `common`, `logger`). |
+| `packages/` | Non-UI shared libraries used across apps and backend (`sdk`, `common`, `logger`). UI components live in `frontend/`, not `packages/` — see §8. |
 | `scripts/` | One-off and recurring automation: formatting, releases, dataset prep, model conversion. |
 | `tests/` | All test types, organized by scope (unit → e2e). |
 | `docs/` | Public docs, internal docs, architecture references, versioned specs. |
@@ -140,6 +140,8 @@ Training data is split into `ai/datasets/public/` (reproducible, documented sour
 ## 8. Frontend Architecture
 
 Shared, business-logic-free UI components live in `frontend/`; each app in `apps/` composes them into a full product. This keeps desktop, web, and mobile visually consistent without duplicating UI code.
+
+> `frontend/` supersedes the UI library originally planned for `packages/ui`. A separate component library would need a real reason to exist (e.g. a public design system published independently of app-internal components); until one does, shared UI lives here and `packages/` holds only non-UI shared code (`sdk`, `common`, `logger`).
 
 ## 9. Testing Strategy
 

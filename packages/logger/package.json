@@ -1,0 +1,22 @@
+{
+  "name": "@mikio-ai/logger",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mikio AI — minimal structured logger used across apps and backend. See ARCHITECTURE.md §3.",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
