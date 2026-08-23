@@ -45,7 +45,7 @@ mikio-ai/
 |---|---|
 | `apps/` | User-facing products (desktop, web, mobile). Thin — delegates to `frontend/` and `backend/`. |
 | `ai/` | Everything in the model lifecycle: base model selection, training, datasets, evaluation, inference runtime, prompts, and tool/MCP definitions. |
-| `backend/` | Server-side logic: authentication, API surface, memory, storage, database access. |
+| `backend/` | Server-side logic: authentication (JWT validation), API surface, memory, storage, database access. |
 | `frontend/` | Reusable UI components with no business logic. |
 | `packages/` | Non-UI shared libraries used across apps and backend (`sdk`, `common`, `logger`). UI components live in `frontend/`, not `packages/` — see §8. |
 | `scripts/` | One-off and recurring automation: formatting, releases, dataset prep, model conversion. |
@@ -76,7 +76,7 @@ ai/
 - **STR Model Family** — DTS's fine-tuned lineage (current target: STR-3.5 Pro)
 - **Inference Runtime** — serves the trained model to applications
 - **Tool Layer** — web search, Python, calculator, shell, git, IDE, browser, vision, plus filesystem-style tools (Read, Write, Edit, Glob, Grep, Bash, PowerShell, NotebookEdit, Monitor, Agent/orchestration, AskUserQuestion)
-- **Backend Services** — auth, memory, storage, database, API
+- **Backend Services** — auth (JWT validation), memory, storage, database, API
 - **Client Applications** — desktop, web, mobile, all consuming the same backend/API surface
 
 ## 5. Data Flow
@@ -103,6 +103,34 @@ User (desktop / web / mobile)
 ```
 
 Requests flow from a client through the backend to the inference runtime; the model may call tools mid-response before returning a final answer through the same path.
+
+### 5.1 Authentication Flow (v1)
+
+Per TECH_STACK.md §9, Auth.js (NextAuth) is the selected auth library for v1. Auth.js runs as Next.js route handlers inside `apps/web` — it handles OAuth flows, session creation, and JWT issuance. The `backend/` does not run Auth.js; instead, it validates Auth.js-issued JWTs via a NestJS guard (shared secret / JWKS verification). All clients (web, desktop, mobile) authenticate against `apps/web`'s Auth.js endpoints and present the resulting JWT to `backend/` for protected API calls.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         apps/web (Next.js)                      │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  Auth.js (NextAuth)                                     │   │
+│  │  • OAuth providers (GitHub, Google, etc.)               │   │
+│  │  • Session/JWT issuance (shared secret or JWKS)         │   │
+│  │  • Route handlers: /api/auth/*                          │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       backend/ (NestJS)                         │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  Auth Guard                                              │   │
+│  │  • Validates Auth.js-issued JWT on every protected req  │   │
+│  │  • Extracts user identity → request context             │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Desktop / Mobile (v1):** No native Auth.js host. Authentication for `apps/desktop` and `apps/mobile` is deferred to a later phase. For v1, the documented path is an embedded web view pointing at `apps/web`'s Auth.js routes (`/api/auth/signin`, etc.) — the web view completes the OAuth flow, receives the JWT, and passes it to the native app for subsequent API calls.
 
 ## 6. AI Pipeline
 
@@ -132,7 +160,7 @@ Training data is split into `ai/datasets/public/` (reproducible, documented sour
 *(To be detailed in `TECH_STACK.md` once frameworks are selected.)* Known responsibilities:
 
 - **API** — the surface apps talk to
-- **Auth** — user identity and access control
+- **Auth** — JWT validation (Auth.js-issued tokens); user identity and access control
 - **Memory** — persisted context across sessions
 - **Storage** — file and object storage
 - **Database** — structured application data
